@@ -1,0 +1,61 @@
+/* widget label*/
+
+.collapseHeadline {
+	color: #654;
+	padding-top: 6px;
+	font-size: medium;
+	font-weight: bold;
+}
+
+.inline1{
+	margin-left:8px;
+}
+
+.listEntry{
+	font-size:medium;
+}
+
+.spaceRight{
+	margin-right:12px;
+}
+
+.gwt-CheckBox input{
+	vertical-align: middle;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+  background: #F1F1F1;
+  padding: 4px 8px 4px 4px;
+  cursor: default;
+  border: 1px solid #D2D2D2;
+  font-size: medium;
+}
+
+.gwt-DialogBox .Caption {
+  	font-weight: bold;
+  	border-bottom: 1px solid #D2D2D2;
+  	font-size: medium;
+}
+
+.sidenavEntry{
+	background: #CCC3AF;
+	color: #554;
+	display: block;
+	padding: 8px 4px 8px 12px;
+	text-decoration: none;
+	border-bottom: 1px solid #A98;
+	border-top: 1px solid #DDC;
+	list-style: none;
+	font-size: small;
+}
+
+.widgetLabel {
+  font-size: small;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+h2 {
+	padding-bottom: 4px;
+}
