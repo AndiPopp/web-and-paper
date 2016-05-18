@@ -1,7 +1,7 @@
 /**
  * 
  */
-package eu.sffi.webandpaper.client;
+package eu.sffi.webandpaper.client.ruleset;
 
 import java.io.Serializable;
 

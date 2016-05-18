@@ -6,6 +6,8 @@ package eu.sffi.webandpaper.client;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import eu.sffi.webandpaper.client.ruleset.CharacterListPanel;
+
 /**
  * This class handles events on the upper hierarchy level, esp. the main navigation.
  * @author Andi Popp

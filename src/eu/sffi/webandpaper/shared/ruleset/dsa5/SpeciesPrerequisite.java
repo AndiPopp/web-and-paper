@@ -4,7 +4,8 @@
 package eu.sffi.webandpaper.shared.ruleset.dsa5;
 
 /**
- * A prerequisite to check if a characters species matches a set of given species
+ * A prerequisite to check if a characters species matches one of 
+ * a set of given species
  * @author Andi Popp
  *
  */

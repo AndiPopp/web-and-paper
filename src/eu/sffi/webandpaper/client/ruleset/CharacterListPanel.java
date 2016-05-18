@@ -1,7 +1,7 @@
 /**
  * 
  */
-package eu.sffi.webandpaper.client;
+package eu.sffi.webandpaper.client.ruleset;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -16,6 +16,11 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import eu.sffi.webandpaper.client.AbstractDisplayCharacterPanel;
+import eu.sffi.webandpaper.client.CharacterService;
+import eu.sffi.webandpaper.client.CharacterServiceAsync;
+import eu.sffi.webandpaper.client.CharacterServiceException;
+import eu.sffi.webandpaper.client.WebAndPaper;
 import eu.sffi.webandpaper.client.ui.ConvenientListBox;
 import eu.sffi.webandpaper.shared.ruleset.AbstractCharacter;
 import eu.sffi.webandpaper.shared.ruleset.AbstractRuleset;
@@ -177,8 +182,16 @@ public class CharacterListPanel extends VerticalPanel implements ClickHandler {
 	 * @param character the character to be displayed
 	 */
 	private void switchToCharDisplayPanel(AbstractCharacter character){
-		entryPoint.messageBox.showMessage("Got character!", character.getName());
-		//TODO actually switch stuff
+		AbstractDisplayCharacterPanel charPanel = null;
+		if (character instanceof eu.sffi.webandpaper.shared.ruleset.dsa5.Character){
+			try {
+				charPanel = new eu.sffi.webandpaper.client.ruleset.dsa5.DisplayCharacterPanel((eu.sffi.webandpaper.shared.ruleset.dsa5.Character)character, entryPoint.sideNav);
+			} catch (CharacterServiceException e) {
+				entryPoint.messageBox.showMessage("Illegal character.", "Tried to create a DSA5 character panel with a non DSA 5 character.");
+			}
+		}
+		entryPoint.getContent().setWidget(charPanel);
+		
 	}
 	
 	/**

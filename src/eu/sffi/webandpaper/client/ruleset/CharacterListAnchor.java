@@ -1,7 +1,7 @@
 /**
  * 
  */
-package eu.sffi.webandpaper.client;
+package eu.sffi.webandpaper.client.ruleset;
 
 import com.google.gwt.user.client.ui.Anchor;
 
@@ -24,7 +24,7 @@ public class CharacterListAnchor extends Anchor {
 	public CharacterListAnchor(CharacterShortInfo charInfo) {
 		super();
 		this.charInfo = charInfo;
-		this.setText(""+charInfo.getName()+" ("+charInfo.getId()+")");
+		this.setText(""+charInfo.getName()+" ("+Long.toHexString(charInfo.getId())+")");
 		//set style
 		this.setStyleName("listEntry");
 	}

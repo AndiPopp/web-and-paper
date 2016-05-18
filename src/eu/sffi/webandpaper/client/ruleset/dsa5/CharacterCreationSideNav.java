@@ -77,7 +77,7 @@ public class CharacterCreationSideNav implements ClickHandler {
 		step1 = new Anchor("1. Grundeinstellungen");
 		step1.addClickHandler(mainPanel);
 		stepList.add(new ListItemWidget(step1));
-		step2 = new Anchor("2. Eigenschaftswerte");
+		step2 = new Anchor("2. Profession & Talente");
 		step2.addClickHandler(mainPanel);
 		stepList.add(new ListItemWidget(step2));
 	}

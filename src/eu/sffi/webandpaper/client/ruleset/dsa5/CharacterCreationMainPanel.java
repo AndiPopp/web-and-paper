@@ -3,13 +3,14 @@
  */
 package eu.sffi.webandpaper.client.ruleset.dsa5;
 
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -19,6 +20,7 @@ import eu.sffi.webandpaper.client.CharacterServiceResult;
 import eu.sffi.webandpaper.client.MessageBox;
 import eu.sffi.webandpaper.shared.ruleset.CharacterCreationException;
 import eu.sffi.webandpaper.shared.ruleset.dsa5.Character;
+import eu.sffi.webandpaper.shared.ruleset.dsa5.SkillValue;
 
 /**
  * @author Andi Popp
@@ -42,9 +44,14 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 	private Widget currentStepWidget;
 	
 	/**
-	 * The panel basic character data panel
+	 * The basic character data panel
 	 */
 	private CharacterCreationBasicsPanel characterCreationBasicsPanel;
+	
+	/**
+	 * The profession and skills panel 
+	 */
+	private CharacterCreationSkillPanel characterCreationSkillPanel;
 	
 	/**
 	 * The panel for the sidenav
@@ -67,6 +74,9 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 		this.add(characterCreationBasicsPanel);
 		this.currentStepWidget = characterCreationBasicsPanel;
 		
+		//create the other panels
+		characterCreationSkillPanel = new CharacterCreationSkillPanel(this);
+		
 		//build character for the first time
 		rebuildCharacter();
 	}
@@ -81,6 +91,9 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 			this.character.setName(this.characterCreationBasicsPanel.nameTextBox.getValue());
 			//set the attributes
 			this.character.setAttributes(this.characterCreationBasicsPanel.getAttributes());
+			//set skill values
+			SkillValue[] skillValueArray = new SkillValue[0];
+			this.character.setSkillValues(this.characterCreationSkillPanel.skillValues.values().toArray(skillValueArray));
 			//output left AP to panel
 			int leftAP = this.character.getLeftAP();
 			if (leftAP <= 10 && leftAP >= 0) characterCreationSideNav.currentAP.setText("AP übrig: " + leftAP +" \u2713");
@@ -89,6 +102,7 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 			int attrSum = this.character.getAttributeSum();
 			if (attrSum <= character.getStartingExperienceLevel().maxAttributeSum) characterCreationSideNav.currentAttrSum.setText("Eigenschaften: "+attrSum+"/"+character.getStartingExperienceLevel().maxAttributeSum+" \u2713");
 			else characterCreationSideNav.currentAttrSum.setText("Eigenschaften: "+attrSum+"/"+character.getStartingExperienceLevel().maxAttributeSum+" \u2717");
+			
 		} catch (CharacterCreationException e) {
 			characterCreationSideNav.currentAP.setText("Fehler: " + e.getMessage());
 		}
@@ -119,7 +133,14 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 
 	@Override
 	public void onClick(ClickEvent event) {
+		//remove the current step widget
 		this.remove(currentStepWidget);
-		if (event.getSource().equals(characterCreationSideNav.step1)) this.add(characterCreationBasicsPanel);
+		
+		//set a new current step widget
+		if (event.getSource().equals(characterCreationSideNav.step1)) this.currentStepWidget = characterCreationBasicsPanel;
+		if (event.getSource().equals(characterCreationSideNav.step2)) this.currentStepWidget = characterCreationSkillPanel;
+	
+		//add the new current step widget
+		this.add(currentStepWidget);
 	}
 }

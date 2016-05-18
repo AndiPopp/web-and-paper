@@ -38,27 +38,27 @@ public class WebAndPaper implements EntryPoint {
 	/**
 	 * Anchor for opening groups panel
 	 */
-	Anchor navGroups;
+	public Anchor navGroups;
 	
 	/**
 	 * Anchor for opening character panel
 	 */
-	Anchor navCharacters;
+	public Anchor navCharacters;
 	
 	/**
 	 * Anchor for opening profile panel
 	 */
-	Anchor navProfile;
+	public Anchor navProfile;
 	
 	/**
 	 * Anchor for google login/logout
 	 */
-	Anchor navLogin;
+	public Anchor navLogin;
 	
 	/**
 	 * Event handler to manage navigation events
 	 */
-	WebAndPaperEventHandler eventHandler = new WebAndPaperEventHandler(this);
+	public WebAndPaperEventHandler eventHandler = new WebAndPaperEventHandler(this);
 	
 	/**
 	 * A scroll panel to take in the main content
@@ -68,12 +68,17 @@ public class WebAndPaper implements EntryPoint {
 	/**
 	 * The side navigation panel
 	 */
-	Panel sideNav;
+	public Panel sideNav;
 	
 	/**
 	 * A message box to display error message etc.
 	 */
 	public MessageBox messageBox = new MessageBox();
+	
+	/**
+	 * Static reference to the entry point
+	 */
+	public static WebAndPaper entryPoint;
 	
 	/**
 	 * This is the entry point method.
@@ -91,6 +96,9 @@ public class WebAndPaper implements EntryPoint {
 //		scrollPanel.setHeight("500px");
 //		RootPanel.get("indexMainContent").add(scrollPanel);
 	    
+		//set entry point to this
+		entryPoint = this;
+		
 		//build main navigation
 		mainNav = RootPanel.get("mainNav");
 		checkLoginStatus();

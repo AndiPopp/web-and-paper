@@ -138,7 +138,7 @@ public class CharacterCreationBasicsPanel extends VerticalPanel implements Chang
 		modificationChoicePanel.configure(Ruleset.ruleset.species.get(this.speciesListBox.getSelectText()).attributesModifications);		
 		this.add(modificationChoicePanel);
 		
-		this.add(new HTML("<h3>Werte wählen</h3>"));
+		this.add(new HTML("<h3>Eigenschaftswerte wählen</h3>"));
 		
 		//choose character attributes
 		attrListBoxes = new ConvenientListBox[8];

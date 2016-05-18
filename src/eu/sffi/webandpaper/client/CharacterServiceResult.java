@@ -1,12 +1,12 @@
 package eu.sffi.webandpaper.client;
 
-import java.io.Serializable;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class CharacterServiceResult implements IsSerializable {
 
 	public static final byte OK = 0;
+	
+	public static final byte GENERIC_ERROR = 1;
 	
 	private byte returnCode;
 	private String message;

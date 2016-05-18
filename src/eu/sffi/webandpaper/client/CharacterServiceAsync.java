@@ -2,6 +2,7 @@ package eu.sffi.webandpaper.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import eu.sffi.webandpaper.client.ruleset.CharacterShortInfo;
 import eu.sffi.webandpaper.shared.ruleset.AbstractCharacter;
 
 /**
@@ -18,5 +19,7 @@ public interface CharacterServiceAsync {
 
 	void getCharacter(Long charId, String rulesetName,
 			AsyncCallback<AbstractCharacter> callback);
+
+	void deleteCharacter(Long charId, String rulesetName, AsyncCallback<CharacterServiceResult> callback);
 
 }

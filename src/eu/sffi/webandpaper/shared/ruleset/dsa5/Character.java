@@ -1,12 +1,13 @@
 package eu.sffi.webandpaper.shared.ruleset.dsa5;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-
-import com.google.gwt.user.client.Random;
 
 import eu.sffi.webandpaper.shared.ruleset.AbstractCharacter;
 import eu.sffi.webandpaper.shared.ruleset.AbstractRuleset;
@@ -44,7 +45,12 @@ public class Character extends AbstractCharacter {
 	 */
 	@Persistent
 	public byte[] attributes;
-
+	
+	/**
+	 * The character's skill values
+	 */
+	@Persistent(defaultFetchGroup = "true")
+	private SkillValue[] skillValues;
 	
 	//Constructors
 	
@@ -97,7 +103,7 @@ public class Character extends AbstractCharacter {
 	/**
 	 * Takes the values of an attribute array and copies them to the character's attribut array
 	 * @param attributes the new values for the attribute array
-	 * @throws ArrayIndexOutOfBoundsException if the size of the attribut array does not match the size of the character's attribute array
+	 * @throws ArrayIndexOutOfBoundsException if the size of the attribute array does not match the size of the character's attribute array
 	 */
 	public void setAttributes(byte[] attributes) throws CharacterCreationException{
 		if (this.attributes.length != attributes.length) throw new CharacterCreationException("Attributes array to be assigned does not have the same length as the characters attribute array.");
@@ -106,6 +112,13 @@ public class Character extends AbstractCharacter {
 		}
 	}
 
+	public SkillValue[] getSkillValues() {
+		return skillValues;
+	}
+
+	public void setSkillValues(SkillValue[] skillValues) {
+		this.skillValues = skillValues;
+	}
 	
 	//other methods
 	

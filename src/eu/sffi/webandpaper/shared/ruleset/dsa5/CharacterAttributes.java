@@ -46,35 +46,12 @@ public class CharacterAttributes {
 	 */
 	public static final byte KK = 7;
 	
-//	/**
-//	 * An array of attribute values for a character
-//	 */
-//	@Persistent
-//	private final byte[] values;
-//	
-//	/**
-//	 * An array to save any max value modifications as they are done by e.g. species
-//	 */
-//	@Persistent
-//	private final byte[] maxLevelModifications;
-	
-//	/**
-//	 * Creates a starting set of character attributes with all values at 8
-//	 */
-//	public CharacterAttributes() {
-//		this.values = new byte[8];
-//		for(int i = 0; i < this.values.length; i++){
-//			this.values[i] = 8;
-//		}
-//		this.maxLevelModifications = new byte[8];
-//	}
-	
 	/**
 	 * Returns a {@link String} representation of the attribute
 	 * @param attribute the attribute byte value
 	 * @return a {@link String} representation of the attribute; empty String if the byte value is not associated with any attribute
 	 */
-	public static String attributeName(byte attribute) throws CharacterCreationException {
+	public static String attributeName(byte attribute) throws IllegalArgumentException {
 		switch (attribute) {
 		case MU: return "MU";
 		case KL: return "KL";
@@ -84,7 +61,7 @@ public class CharacterAttributes {
 		case GE: return "GE";
 		case KO: return "KO";
 		case KK: return "KK";
-		default: throw new CharacterCreationException("The byte value "+attribute+" is not a valid attribute identifier.");
+		default: throw new IllegalArgumentException("The byte value "+attribute+" is not a valid attribute identifier.");
 		}
 	}
 	

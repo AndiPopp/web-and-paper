@@ -3,6 +3,7 @@
  */
 package eu.sffi.webandpaper.client;
 
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import eu.sffi.webandpaper.shared.ruleset.AbstractCharacter;
@@ -17,7 +18,7 @@ public abstract class AbstractDisplayCharacterPanel extends VerticalPanel {
 	/**
 	 * The character associated with this panel
 	 */
-	AbstractCharacter character;
+	protected final AbstractCharacter character;
 
 	/**
 	 * Full parameter constructor
@@ -28,6 +29,12 @@ public abstract class AbstractDisplayCharacterPanel extends VerticalPanel {
 		this.character = character;
 	}
 	
+	/**
+	 * Getter for character
+	 */
+	public AbstractCharacter getCharacter(){
+		return this.character;
+	}
 	
 	
 }

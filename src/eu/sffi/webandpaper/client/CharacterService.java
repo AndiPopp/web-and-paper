@@ -3,6 +3,7 @@ package eu.sffi.webandpaper.client;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import eu.sffi.webandpaper.client.ruleset.CharacterShortInfo;
 import eu.sffi.webandpaper.shared.ruleset.AbstractCharacter;
 
 
@@ -38,4 +39,13 @@ public interface CharacterService extends RemoteService {
 	 * @throws NotLoggedInException if the user is not logged in
 	 */
 	public CharacterShortInfo[] listCharacters() throws NotLoggedInException;
+	
+	/**
+	 * Deletes a character from the database
+	 * @param charId the characters id
+	 * @return a confirmation or nonconfirmation message
+	 * @throws NotLoggedInException if the user is not logged in
+	 * @throws CharacterServiceException if the user is not the chars owner or the char is in a group
+	 */
+	public CharacterServiceResult deleteCharacter(Long charId, String rulesetName) throws NotLoggedInException, CharacterServiceException;
 }

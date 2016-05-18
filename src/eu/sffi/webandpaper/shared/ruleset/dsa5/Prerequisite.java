@@ -4,7 +4,7 @@
 package eu.sffi.webandpaper.shared.ruleset.dsa5;
 
 /**
- * This is the interface that needs to be implemented by any classes reprensting
+ * This is the interface that needs to be implemented by any classes representing
  * prerequisites for Advantages, Disadvantages or special skills
  * @author Andi Popp
  *

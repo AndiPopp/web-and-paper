@@ -20,9 +20,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import eu.sffi.webandpaper.client.CharacterService;
 import eu.sffi.webandpaper.client.CharacterServiceException;
 import eu.sffi.webandpaper.client.CharacterServiceResult;
-import eu.sffi.webandpaper.client.CharacterShortInfo;
 import eu.sffi.webandpaper.client.NotLoggedInException;
+import eu.sffi.webandpaper.client.ruleset.CharacterShortInfo;
 import eu.sffi.webandpaper.shared.ruleset.AbstractCharacter;
+import eu.sffi.webandpaper.shared.ruleset.dsa5.SkillValue;
 
 /**
  * The implementation of the remote character service.
@@ -44,13 +45,16 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 		//Get the user or throw a NotLoggedInException if the user is not logged in
 		User user = getUser();
 		
-		//verify the character
+		System.out.println("Debug 0");
+		
+		//clean and verify the character
 		character.verify();
 		
 		//Save the character to datastore
 		PersistenceManager pm = PMF.getPersistenceManager();
 		try{
 			character.setOwner(user.getUserId());
+			System.out.println("Debug 1");
 			AbstractCharacter savedCharacter = pm.makePersistent(character);
 			System.out.println("Charakter gespeichert unter: "+savedCharacter.getId());
 		}
@@ -87,12 +91,11 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 		PersistenceManager pm = PMF.getPersistenceManager();
 		
 		try{
-			//get DSA5 character
+			//get DSA5 characters
 			Query q = pm.newQuery(eu.sffi.webandpaper.shared.ruleset.dsa5.Character.class, "ownerId == o");
 			q.declareParameters("String o");
 			List<AbstractCharacter> characterResults = (List<AbstractCharacter>) q.execute(user.getUserId());
 			charCollection.addAll(characterResults);
-			
 		}
 		finally {
 			pm.close();
@@ -128,10 +131,15 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 			else{
 				throw new CharacterServiceException("Could not load character with id "+charId+". Unknown rulesetName.");
 			}
+			
 			q.declareParameters("Long i");
 			List<AbstractCharacter> characterResults = (List<AbstractCharacter>) q.execute(charId);
 			if (characterResults.isEmpty()) throw new CharacterServiceException("Could not load character with id "+charId);
 			else character = characterResults.iterator().next();
+			
+			//object is loaded lazy, access the child objects as long as the persistance manager is open
+//			if (rulesetName.equals("DSA 5")) fullyLoadDSA5Char((eu.sffi.webandpaper.shared.ruleset.dsa5.Character)character);
+			
 		}
 		finally {
 			pm.close();
@@ -140,7 +148,6 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 		//Check if user has right to see character
 		//user is owner
 		if (character.getOwnerId().equals(user.getUserId())){
-			System.out.println("Return character");
 			return character;
 		}
 		else{
@@ -148,4 +155,60 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 		}
 		
 	}
+
+
+	@Override
+	public CharacterServiceResult deleteCharacter(Long charId, String rulesetName) throws NotLoggedInException
+	{
+			
+		//Get the user or throw a NotLoggedInException if the user is not logged in
+		User user = getUser();
+		
+		//return object
+		AbstractCharacter character = null;
+		
+		//get the object from the persistence manager
+		PersistenceManager pm = PMF.getPersistenceManager();
+
+		//build return object
+		CharacterServiceResult result = new CharacterServiceResult();
+		
+		try{
+			Query q = null;
+			//map the correct persistence class
+			if (rulesetName.equals("DSA 5")){
+				q = pm.newQuery(eu.sffi.webandpaper.shared.ruleset.dsa5.Character.class, "id == i");
+			}
+			else{
+				throw new CharacterServiceException("Could not load character with id "+charId+". Unknown rulesetName.");
+			}
+			q.declareParameters("Long i");
+			List<AbstractCharacter> characterResults = (List<AbstractCharacter>) q.execute(charId);
+			if (characterResults.isEmpty()) throw new CharacterServiceException("Could not load character with id "+charId);
+			else character = characterResults.iterator().next();
+			
+			//check if user is owner
+			if (!character.getOwnerId().equals(user.getUserId())) throw new CharacterServiceException("Could not delete character with id "+charId+". You are not the owner.");
+
+			//delete character
+			pm.deletePersistent(character);
+			
+			Thread.sleep(5000, 0);
+			
+			//set result
+			result.setReturnCode(CharacterServiceResult.OK);
+			result.setMessage("Character with id "+charId+" was succesfully deleted.");
+		}
+		catch (Exception ex){
+			result.setReturnCode(CharacterServiceResult.GENERIC_ERROR);
+			result.setMessage("Character with id "+charId+" was not deleted: "+ex.getMessage());
+		}
+		finally {
+			pm.close();
+		}
+		
+		//return result
+		return result;
+	}
+
 }

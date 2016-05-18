@@ -1,6 +1,7 @@
 package eu.sffi.webandpaper.shared.ruleset.dsa5;
 
 
+
 /**
  * A class representing an experience level (cf. DSA5 rule book p. 39)
  * @author Andi Popp
@@ -114,6 +115,11 @@ public class CharacterExperienceLevel {
 		this.maxForeignSpellCount = maxForeignSpellCount;
 	}
 	
+	@Override
+	public String toString(){
+		return nameAsString(this.level);
+	}
+	
 	//GETTERS AND SETTERS
 	
 	
@@ -168,6 +174,5 @@ public class CharacterExperienceLevel {
 		else if (exp < 2100) return getLevel(BRILLIANT);
 		else return getLevel(LEGENDAER);
 	}
-	
 	
 }
