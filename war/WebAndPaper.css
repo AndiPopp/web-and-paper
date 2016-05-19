@@ -19,6 +19,15 @@
 	margin-right:12px;
 }
 
+.spaceLeft{
+	margin-left:12px;
+}
+
+.spaceBoth{
+	margin-right:12px;
+	margin-left:12px;
+}
+
 .gwt-CheckBox input{
 	vertical-align: middle;
 }

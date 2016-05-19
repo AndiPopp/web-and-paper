@@ -296,6 +296,7 @@ public class CharacterCreationBasicsPanel extends VerticalPanel implements Chang
 		else{
 			if (event.getSource().equals(chooseExpLevelBox)){
 				updateAttributeListBoxes();
+				mainPanel.characterCreationSkillPanel.updateMaxValues();
 			}
 			else if (event.getSource().equals(speciesListBox)){
 				updateCultureListBox();

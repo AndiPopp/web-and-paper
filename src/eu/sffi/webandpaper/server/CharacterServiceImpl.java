@@ -140,14 +140,6 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 			pm.close();
 		}
 		
-		if (rulesetName.equals("DSA 5")) {
-			System.out.println(((eu.sffi.webandpaper.shared.ruleset.dsa5.Character)character).getSkillValues());
-			for (SkillValue value : ((eu.sffi.webandpaper.shared.ruleset.dsa5.Character)character).getSkillValues()){
-				System.out.println(value.skillName+": "+value.value);
-			}
-		};
-		
-		
 		//Check if user has right to see character
 		//user is owner
 		if (character.getOwnerId().equals(user.getUserId())){
@@ -200,7 +192,7 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 			
 			//set result
 			result.setReturnCode(CharacterServiceResult.OK);
-			result.setMessage("Character with id "+charId+" was succesfully deleted.");
+			result.setMessage("Operation succesful. Character with id "+charId+" will be deleted shortly.");
 		}
 		catch (Exception ex){
 			result.setReturnCode(CharacterServiceResult.GENERIC_ERROR);

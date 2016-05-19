@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
  
 /**
- * List item widget curtesy of https://turbomanage.wordpress.com/2010/02/11/writing-plain-html-in-gwt/
+ * List item widget courtesy of https://turbomanage.wordpress.com/2010/02/11/writing-plain-html-in-gwt/
  * @author https://turbomanage.wordpress.com/2010/02/11/writing-plain-html-in-gwt/
  *
  */

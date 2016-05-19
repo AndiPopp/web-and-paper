@@ -66,7 +66,7 @@ public class DisplayCharacterPanel extends AbstractDisplayCharacterPanel impleme
 		this.add(new HTML("<h2>Attribute</h2>"));
 		this.add(new HTML("<h2>Talente</h2>"));
 		for (SkillValue skillvalue : character.getSkillValues()){
-			this.add(new HTML(skillvalue.skillName+": "+skillvalue.value+"<br/>"));
+			this.add(new HTML(skillvalue.skillName+": "+skillvalue.level+"<br/>"));
 		}
 	}
 	

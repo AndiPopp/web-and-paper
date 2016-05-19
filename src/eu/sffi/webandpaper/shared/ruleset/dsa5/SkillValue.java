@@ -8,6 +8,7 @@ import java.io.Serializable;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -41,10 +42,10 @@ public class SkillValue implements Serializable {
 	public String skillName;
 
 	/**
-	 * The skill value
+	 * The skill level
 	 */
 	@Persistent(defaultFetchGroup = "true")
-	public byte value;
+	public byte level;
 	
 	/**
 	 * Empty constructor
@@ -59,12 +60,12 @@ public class SkillValue implements Serializable {
 	public SkillValue(String skillName, byte value) {
 		super();
 		this.skillName = skillName;
-		this.value = value;
+		this.level = value;
 	}
-
+	
 	@Override
 	public String toString(){
-		return this.skillName + ": " + this.value;
+		return this.skillName + ": " + this.level;
 	}
 	
 	public String getKey() {

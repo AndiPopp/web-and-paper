@@ -8,8 +8,10 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 
+import eu.sffi.webandpaper.client.WebAndPaper;
 import eu.sffi.webandpaper.client.ui.ListItemWidget;
 import eu.sffi.webandpaper.client.ui.UnorderedListWidget;
+import eu.sffi.webandpaper.shared.ruleset.CharacterCreationException;
 
 public class CharacterCreationSideNav implements ClickHandler {
 	
@@ -27,6 +29,11 @@ public class CharacterCreationSideNav implements ClickHandler {
 	 * The current attribute sum label
 	 */
 	public Label currentAttrSum;
+	
+	/**
+	 * A label telling about the last time the character was rebuilt
+	 */
+	Label lastBuild;
 	
 	/**
 	 * 
@@ -61,6 +68,9 @@ public class CharacterCreationSideNav implements ClickHandler {
 		currentAttrSum = new Label("Eigenschaften:");
 		currentAttrSum.setStyleName("sidenavEntry");
 		targetPanel.add(currentAttrSum);
+		lastBuild = new Label("Stand:");
+		lastBuild.setStyleName("sidenavEntry");
+		targetPanel.add(lastBuild);
 		saveButton.setEnabled(true);
 		saveButton.addClickHandler(this);
 		saveButton.setWidth("100%");
@@ -87,7 +97,12 @@ public class CharacterCreationSideNav implements ClickHandler {
 	@Override
 	public void onClick(ClickEvent event) {
 		this.currentAP.setText("Click");
-		mainPanel.saveCharacter();
+		try{
+			mainPanel.saveCharacter();
+		}
+		catch(CharacterCreationException ex){
+			WebAndPaper.entryPoint.messageBox.showMessage("Fehler", ex.getMessage());
+		}
 	}
 
 }

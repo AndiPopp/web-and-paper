@@ -1,6 +1,7 @@
 package eu.sffi.webandpaper.shared.ruleset.dsa5;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
@@ -128,7 +129,7 @@ public class Character extends AbstractCharacter {
 	 * Calculates this character's left AP.
 	 * @return this character's left AP
 	 */
-	public int getLeftAP() throws CharacterCreationException {
+	public int getLeftAP(Map<String, Skill> skillMap) throws CharacterCreationException {
 		//Start by initialising with starting experience level
 		CharacterExperienceLevel expLevel = this.getStartingExperienceLevel();
 		if (expLevel == null) throw new CharacterCreationException("Unzulässiger Byte-Wert für Erfahrungsgrad: " + this.startingExperienceLevel);
@@ -141,6 +142,11 @@ public class Character extends AbstractCharacter {
 		
 		//subtract the attribute cost
 		ap -= getAttributeCosts();
+		
+		//subtract skill cost
+		for (SkillValue skillValue : skillValues){
+			ap -= skillMap.get(skillValue.skillName).getTotalLevelingCosts(skillValue.level);
+		}
 		
 		//return calculated ap
 		return ap;
@@ -202,22 +208,31 @@ public class Character extends AbstractCharacter {
 		//Check experience level
 		CharacterExperienceLevel startExpLevel = this.getStartingExperienceLevel();
 		if (startExpLevel == null) throw new CharacterCreationException("The byte value "+this.startingExperienceLevel+" is not a valid character experience level identifier.");
+		
 		//Check species
 		CharacterSpecies characterSpecies = this.getSpecies();
 		if (characterSpecies == null) throw new CharacterCreationException("Unknown species: "+this.species);
+		
 		//Check culture
 		CharacterCulture characterCulture = this.getCulture();
 		if (characterCulture == null) throw new CharacterCreationException("Unknown culture: "+this.culture);
+		
 		//Check attribute value ranges
-		checkAttributeRange();
+		checkAttributeRange();		
+		
 		//Check attribute sum
 		if (!checkAttributeSum()) throw new CharacterCreationException("The attribute sum "+this.getAttributeSum()+" exceeds the limit of "+this.getStartingExperienceLevel().maxAttributeSum);
 		
+		//Check skill levels
+		for (SkillValue skillValue : skillValues){
+			if (skillValue.level > startExpLevel.maxSkill) throw new CharacterCreationException(skillValue.skillName+": "+skillValue.level+" > "+startExpLevel.maxSkill+" ("+startExpLevel.toString()+")");
+		}
+		
 		//default name if necessary
 		if (this.getName() == null) this.setName("Der Namenlose "+(""+System.currentTimeMillis()).substring(9));
-		//TODO uncomment in productive environment
+
 		//check name length
-		if (this.getName().length() < 4) throw new CharacterCreationException("Character name must be at least 4 symbols.");
+		if (this.getName().length() < 3) throw new CharacterCreationException("Character name must be at least 3 symbols.");
 			
 		//everything went smooth
 		return true;

@@ -25,6 +25,12 @@ public class CharacterCreationExpLevelListBox extends ConvenientListBox {
 		this.setSelectedIndex(CharacterExperienceLevel.ERFAHREN);
 	}
 	
-
+	/**
+	 * Returns a {@link CharacterExperienceLevel} object according to the current selection.
+	 * @return a {@link CharacterExperienceLevel} object according to the current selection.
+	 */
+    public CharacterExperienceLevel getExperienceLevel(){
+    	return CharacterExperienceLevel.getLevel((byte)this.getSelectedIndex());
+    }
 	
 }

@@ -3,16 +3,20 @@
  */
 package eu.sffi.webandpaper.client.ruleset.dsa5;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.ibm.icu.text.DateFormatSymbols;
 
 import eu.sffi.webandpaper.client.CharacterService;
 import eu.sffi.webandpaper.client.CharacterServiceAsync;
@@ -46,12 +50,12 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 	/**
 	 * The basic character data panel
 	 */
-	private CharacterCreationBasicsPanel characterCreationBasicsPanel;
+	CharacterCreationBasicsPanel characterCreationBasicsPanel;
 	
 	/**
 	 * The profession and skills panel 
 	 */
-	private CharacterCreationSkillPanel characterCreationSkillPanel;
+	CharacterCreationSkillPanel characterCreationSkillPanel;
 	
 	/**
 	 * The panel for the sidenav
@@ -59,6 +63,8 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 	private CharacterCreationSideNav characterCreationSideNav;
 	
 	MessageBox messageBox = new MessageBox();
+	
+	private DateTimeFormat dateFormat = DateTimeFormat.getFormat("hh:mm:ss");
 	
 	public CharacterCreationMainPanel(Panel sideNav) {
 		super();
@@ -94,13 +100,15 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 			//set skill values
 			this.character.setSkillValues(new ArrayList<SkillValue>(this.characterCreationSkillPanel.skillValues.values()));
 			//output left AP to panel
-			int leftAP = this.character.getLeftAP();
+			int leftAP = this.character.getLeftAP(this.characterCreationSkillPanel.skillMap);
 			if (leftAP <= 10 && leftAP >= 0) characterCreationSideNav.currentAP.setText("AP übrig: " + leftAP +" \u2713");
 			else characterCreationSideNav.currentAP.setText("AP übrig: " + leftAP +" \u2717");
 			//output attribute sum to panel
 			int attrSum = this.character.getAttributeSum();
 			if (attrSum <= character.getStartingExperienceLevel().maxAttributeSum) characterCreationSideNav.currentAttrSum.setText("Eigenschaften: "+attrSum+"/"+character.getStartingExperienceLevel().maxAttributeSum+" \u2713");
 			else characterCreationSideNav.currentAttrSum.setText("Eigenschaften: "+attrSum+"/"+character.getStartingExperienceLevel().maxAttributeSum+" \u2717");
+			//ouput last build
+			characterCreationSideNav.lastBuild.setText("Stand: "+dateFormat.format(new Date()));
 			
 		} catch (CharacterCreationException e) {
 			characterCreationSideNav.currentAP.setText("Fehler: " + e.getMessage());
