@@ -14,7 +14,7 @@ import com.google.appengine.api.users.User;
  * @author Andi Popp
  *
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy=InheritanceStrategy.SUBCLASS_TABLE)
 public abstract class AbstractCharacter implements Serializable {
 

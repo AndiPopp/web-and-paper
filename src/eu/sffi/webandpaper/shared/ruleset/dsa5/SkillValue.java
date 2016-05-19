@@ -12,8 +12,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Key;
-
 /**
  * A skill value of a character. Optimized for persistance
  * @author Andi Popp
@@ -29,7 +27,13 @@ public class SkillValue implements Serializable {
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
     private String encodedKey;
-	
+    
+    /**
+     * The owner of this skill value
+     */
+    @Persistent
+    private Character owner;
+    
 	/**
 	 * The skill
 	 */
@@ -66,4 +70,14 @@ public class SkillValue implements Serializable {
 	public String getKey() {
 		return encodedKey;
 	}
+
+	public Character getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Character owner) {
+		this.owner = owner;
+	}
+	
+	
 }

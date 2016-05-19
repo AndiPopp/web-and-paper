@@ -52,7 +52,7 @@ public class CharacterCreationSkillPanel extends VerticalPanel implements Change
 	protected void resetSkillValues(){
 		skillValues = new TreeMap<String, SkillValue>();
 		for(Skill skill : skillMap.values()){
-			skillValues.put(skill.name, new SkillValue(skill.name, (byte)0));
+			skillValues.put(skill.name, new SkillValue(skill.name, (byte)5));
 		}
 	}
 	

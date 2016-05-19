@@ -23,6 +23,7 @@ import eu.sffi.webandpaper.client.CharacterServiceResult;
 import eu.sffi.webandpaper.client.NotLoggedInException;
 import eu.sffi.webandpaper.client.ruleset.CharacterShortInfo;
 import eu.sffi.webandpaper.shared.ruleset.AbstractCharacter;
+import eu.sffi.webandpaper.shared.ruleset.CharacterCreationException;
 import eu.sffi.webandpaper.shared.ruleset.dsa5.SkillValue;
 
 /**
@@ -41,11 +42,9 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public CharacterServiceResult saveCharacter(AbstractCharacter character)
-			throws NotLoggedInException, CharacterServiceException {
+			throws NotLoggedInException, CharacterServiceException, CharacterCreationException {
 		//Get the user or throw a NotLoggedInException if the user is not logged in
 		User user = getUser();
-		
-		System.out.println("Debug 0");
 		
 		//clean and verify the character
 		character.verify();
@@ -54,7 +53,6 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 		PersistenceManager pm = PMF.getPersistenceManager();
 		try{
 			character.setOwner(user.getUserId());
-			System.out.println("Debug 1");
 			AbstractCharacter savedCharacter = pm.makePersistent(character);
 			System.out.println("Charakter gespeichert unter: "+savedCharacter.getId());
 		}
@@ -121,6 +119,7 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 		
 		//get the object from the persistence manager
 		PersistenceManager pm = PMF.getPersistenceManager();
+		pm.getFetchPlan().setMaxFetchDepth(-1);
 		
 		try{
 			Query q = null;
@@ -135,15 +134,19 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 			q.declareParameters("Long i");
 			List<AbstractCharacter> characterResults = (List<AbstractCharacter>) q.execute(charId);
 			if (characterResults.isEmpty()) throw new CharacterServiceException("Could not load character with id "+charId);
-			else character = characterResults.iterator().next();
-			
-			//object is loaded lazy, access the child objects as long as the persistance manager is open
-//			if (rulesetName.equals("DSA 5")) fullyLoadDSA5Char((eu.sffi.webandpaper.shared.ruleset.dsa5.Character)character);
-			
+			else character = pm.detachCopy(characterResults.iterator().next());
 		}
 		finally {
 			pm.close();
 		}
+		
+		if (rulesetName.equals("DSA 5")) {
+			System.out.println(((eu.sffi.webandpaper.shared.ruleset.dsa5.Character)character).getSkillValues());
+			for (SkillValue value : ((eu.sffi.webandpaper.shared.ruleset.dsa5.Character)character).getSkillValues()){
+				System.out.println(value.skillName+": "+value.value);
+			}
+		};
+		
 		
 		//Check if user has right to see character
 		//user is owner
@@ -189,11 +192,11 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 			
 			//check if user is owner
 			if (!character.getOwnerId().equals(user.getUserId())) throw new CharacterServiceException("Could not delete character with id "+charId+". You are not the owner.");
-
-			//delete character
+			
+			cleanUpBeforeDeletion(character, pm);
 			pm.deletePersistent(character);
 			
-			Thread.sleep(5000, 0);
+			Thread.sleep(50);
 			
 			//set result
 			result.setReturnCode(CharacterServiceResult.OK);
@@ -211,4 +214,21 @@ public class CharacterServiceImpl extends RemoteServiceServlet implements
 		return result;
 	}
 
+	/**
+	 * Cleans up a character to be deleted
+	 * @param character the character
+	 * @param pm the persistence manager this character is tied to
+	 */
+	private void cleanUpBeforeDeletion(AbstractCharacter character, PersistenceManager pm){
+		if (character.rulesetName().equals("DSA 5")){
+			eu.sffi.webandpaper.shared.ruleset.dsa5.Character charac = (eu.sffi.webandpaper.shared.ruleset.dsa5.Character) character;
+			pm.deletePersistentAll(charac.getSkillValues());
+		}
+		
+		//sleep a bit
+		try{
+			Thread.sleep(100);
+		}
+		catch(InterruptedException ex){}
+	}
 }

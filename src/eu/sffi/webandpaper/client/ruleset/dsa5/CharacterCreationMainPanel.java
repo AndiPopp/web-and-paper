@@ -92,8 +92,7 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 			//set the attributes
 			this.character.setAttributes(this.characterCreationBasicsPanel.getAttributes());
 			//set skill values
-			SkillValue[] skillValueArray = new SkillValue[0];
-			this.character.setSkillValues(this.characterCreationSkillPanel.skillValues.values().toArray(skillValueArray));
+			this.character.setSkillValues(new ArrayList<SkillValue>(this.characterCreationSkillPanel.skillValues.values()));
 			//output left AP to panel
 			int leftAP = this.character.getLeftAP();
 			if (leftAP <= 10 && leftAP >= 0) characterCreationSideNav.currentAP.setText("AP übrig: " + leftAP +" \u2713");
@@ -108,8 +107,9 @@ public class CharacterCreationMainPanel extends VerticalPanel implements ClickHa
 		}
 	}
 	
-	public void saveCharacter(){
+	public void saveCharacter() throws CharacterCreationException{
 		rebuildCharacter();
+		character.verify();
 		AsyncCallback<CharacterServiceResult> callback = new AsyncCallback<CharacterServiceResult>() {
 
 			@Override

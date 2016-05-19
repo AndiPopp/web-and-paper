@@ -1,6 +1,5 @@
 package eu.sffi.webandpaper.shared.ruleset.dsa5;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.annotations.IdentityType;
@@ -18,7 +17,7 @@ import eu.sffi.webandpaper.shared.ruleset.CharacterCreationException;
  * @author Andi Popp
  *
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class Character extends AbstractCharacter {
 	
@@ -44,13 +43,13 @@ public class Character extends AbstractCharacter {
 	 * The character's attributes.
 	 */
 	@Persistent
-	public byte[] attributes;
+	public byte[] attributes = new byte[8];
 	
 	/**
 	 * The character's skill values
 	 */
-	@Persistent(defaultFetchGroup = "true")
-	private SkillValue[] skillValues;
+	@Persistent(mappedBy = "owner", defaultFetchGroup = "true")
+	private List<SkillValue> skillValues;
 	
 	//Constructors
 	
@@ -112,12 +111,15 @@ public class Character extends AbstractCharacter {
 		}
 	}
 
-	public SkillValue[] getSkillValues() {
+	public List<SkillValue> getSkillValues() {
 		return skillValues;
 	}
 
-	public void setSkillValues(SkillValue[] skillValues) {
+	public void setSkillValues(List<SkillValue> skillValues) {
 		this.skillValues = skillValues;
+		for (SkillValue skillValue : this.skillValues){
+			skillValue.setOwner(this);
+		}
 	}
 	
 	//other methods

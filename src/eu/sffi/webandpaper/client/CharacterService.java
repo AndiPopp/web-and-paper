@@ -5,6 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import eu.sffi.webandpaper.client.ruleset.CharacterShortInfo;
 import eu.sffi.webandpaper.shared.ruleset.AbstractCharacter;
+import eu.sffi.webandpaper.shared.ruleset.CharacterCreationException;
 
 
 /**
@@ -22,7 +23,7 @@ public interface CharacterService extends RemoteService {
 	 * @throws NotLoggedInException if the user is not logged in
 	 * @throws CharacterServiceException if the user has exceeded their character limit 
 	 */
-	public CharacterServiceResult saveCharacter(AbstractCharacter character) throws NotLoggedInException, CharacterServiceException;
+	public CharacterServiceResult saveCharacter(AbstractCharacter character) throws NotLoggedInException, CharacterServiceException, CharacterCreationException;
 	
 	/**
 	 * Gets a specific character by id, if the user requesting the character is the owner
